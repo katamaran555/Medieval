@@ -2,17 +2,16 @@ using UnityEngine;
 
 public class DonenEngel3D : MonoBehaviour
 {
-	public float donusHizi = 10f;
+	public float donusHizi = 150f;
+	public Vector3 donusEkseni = new Vector3(1, 0, 0);
 
-	// Mouse ile sürükleyince çalýþýr
 	void OnMouseDrag()
 	{
-		Debug.Log("Týklanýyor ve Kod Çalýþýyor!");
-		// Mouse'un saða-sola hareketini al
-		float rotX = Input.GetAxis("Mouse X") * donusHizi;
+		// Mouse Y hareketini alýyoruz
+		float fareHareketi = Input.GetAxis("Mouse Y") * donusHizi * Time.deltaTime;
 
-		// Objeyi Y ekseninde (Kendi etrafýnda) döndür
-		// Senin silindirin yan yattýðý için Y ekseni pervane dönüþü saðlar
-		transform.Rotate(0, 0, rotX);
+		// Baþýna eksi (-) koyarak yönü tersine çeviriyoruz
+		// Eðer zaten eksi varsa, eksiyi kaldýrýp dene
+		transform.Rotate(donusEkseni * -fareHareketi);
 	}
 }
