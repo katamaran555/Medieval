@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &1877861987669099619
+--- !u!1001 &2382042124622586851
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,7 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 18972534426743922, guid: 3cb411f6a6576f04a9fb4de20b4a7553, type: 3}
       propertyPath: m_Name
-      value: Level_Sablon
+      value: Level_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6227864138026093527, guid: 3cb411f6a6576f04a9fb4de20b4a7553, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6227864138026093527, guid: 3cb411f6a6576f04a9fb4de20b4a7553, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -11.4
       objectReference: {fileID: 0}
     - target: {fileID: 6749951553223238950, guid: 3cb411f6a6576f04a9fb4de20b4a7553, type: 3}
       propertyPath: m_LocalPosition.x
