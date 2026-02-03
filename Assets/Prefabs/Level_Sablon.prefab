@@ -1176,6 +1176,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TopSesi
   minHiz: 0.5
+  minPitch: 0.8
+  maxPitch: 1.5
+  maxHiz: 15
+  carpmaSesi: {fileID: 8300000, guid: 7054ea275dc5ad842b383278e9e5058f, type: 3}
+  maxCarpmaHizi: 10
 --- !u!1 &4977460905925252897
 GameObject:
   m_ObjectHideFlags: 0

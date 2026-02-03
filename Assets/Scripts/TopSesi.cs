@@ -9,7 +9,7 @@ public class TopSesi : MonoBehaviour
     private Rigidbody rb;
     private AudioSource audioSource;
 
-    [Header("Ayarlar")]
+    [Header("Yuvarlanma Ayarları")]
     [Tooltip("Topun ses çıkarması için gereken minimum hız.")]
     public float minHiz = 0.5f;
 
@@ -20,6 +20,11 @@ public class TopSesi : MonoBehaviour
     public float maxPitch = 2.0f;
     [Tooltip("Topun bu hıza ulaştığında pitch en yüksek değere ulaşır.")]
     public float maxHiz = 15.0f;
+
+    [Header("Çarpma Sesleri")]
+    public AudioClip carpmaSesi;
+    [Tooltip("En yüksek ses için gereken çarpma hızı.")]
+    public float maxCarpmaHizi = 10f;
 
     void Start()
     {
@@ -53,7 +58,6 @@ public class TopSesi : MonoBehaviour
             }
 
             // Pitch ayarlaması: Hıza göre sesi incelt
-            // Hızı 0 ile maxHiz arasında normalleştir (0.0 - 1.0 arası değer)
             float oran = Mathf.Clamp01(hiz / maxHiz);
             
             // Min ve Max pitch arasında geçiş yap
@@ -66,5 +70,22 @@ public class TopSesi : MonoBehaviour
                 audioSource.Stop();
             }
         }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (carpmaSesi == null) return;
+
+        // Çarpma hızını al
+        float carpmaSiddeti = collision.relativeVelocity.magnitude;
+
+        // Çok yavaş çarpmalarda ses çalma
+        if (carpmaSiddeti < 1f) return;
+
+        // Sesi şiddete göre ayarla (max 1.0)
+        float sesSeviyesi = Mathf.Clamp01(carpmaSiddeti / maxCarpmaHizi);
+
+        // Sesi bir kez çal (PlayOneShot) - Mevcut çalan yuvarlanma sesini kesmez
+        audioSource.PlayOneShot(carpmaSesi, sesSeviyesi);
     }
 }
