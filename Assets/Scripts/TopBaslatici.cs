@@ -1,39 +1,85 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
+// Bu satÄ±r, bu scripti eklediÄŸinizde otomatik olarak bir AudioSource bileÅŸeni ekler.
+[RequireComponent(typeof(AudioSource))]
 public class TopBaslatici : MonoBehaviour
 {
-	private Rigidbody rb;
-	private bool oyunBasladi = false;
+    private Rigidbody rb;
+    private bool oyunBasladi = false;
 
-	void Start()
-	{
-		// Topun fizik motorunu al
-		rb = GetComponent<Rigidbody>();
+    [Header("Ses AyarlarÄ±")]
+    public AudioSource yuvarlanmaSesi; // Otomatik bulunacak
+    public float sesIcinMinimumHiz = 0.5f;
 
-		// BAÞLANGIÇTA DONDUR!
-		// IsKinematic = true demek "Fizikten etkilenme, havada asýlý kal" demektir.
-		rb.isKinematic = true;
-	}
+    void Start()
+    {
+        // Topun fizik motorunu al
+        rb = GetComponent<Rigidbody>();
 
-	// Topun üzerine týklanýnca çalýþýr
-	void OnMouseDown()
-	{
-		if (!oyunBasladi)
-		{
-			Baslat();
-		}
-	}
+        // EÄŸer Inspector'dan ses atanmadÄ±ysa, otomatik bulmaya Ã§alÄ±ÅŸ
+        if (yuvarlanmaSesi == null)
+        {
+            yuvarlanmaSesi = GetComponent<AudioSource>();
+        }
 
-	void Baslat()
-	{
-		oyunBasladi = true;
+        // BAÅžLANGIÃ‡TA DONDUR!
+        rb.isKinematic = true;
+    }
 
-		// Fiziði serbest býrak! Yerçekimi devreye girsin.
-		rb.isKinematic = false;
+    // Topun Ã¼zerine tÄ±klanÄ±nca Ã§alÄ±ÅŸÄ±r
+    void OnMouseDown()
+    {
+        if (!oyunBasladi)
+        {
+            Baslat();
+        }
+    }
 
-		// Ufak bir dürtme kuvveti (Eðer zemin az eðimliyse iþe yarar)
-		// rb.AddForce(Vector3.back * 50f); // Gerekirse açabilirsin
+    void Baslat()
+    {
+        oyunBasladi = true;
 
-		Debug.Log("Top Yuvarlanmaya Baþladý!");
-	}
+        // FiziÄŸi serbest bÄ±rak!
+        rb.isKinematic = false;
+
+        Debug.Log("Top Yuvarlanmaya BaÅŸladÄ±!");
+    }
+
+    void Update()
+    {
+        if (oyunBasladi)
+        {
+            KontrolSes();
+        }
+    }
+
+    void KontrolSes()
+    {
+        if (yuvarlanmaSesi == null) return;
+
+        // Top hareket ediyor mu? (Unity 6 iÃ§in linearVelocity)
+        bool hareketEdiyor = rb.linearVelocity.magnitude > sesIcinMinimumHiz;
+
+        // Yerde mi? (BasitÃ§e aÅŸaÄŸÄ±ya Ä±ÅŸÄ±n yolluyoruz)
+        bool yerde = Physics.Raycast(transform.position, Vector3.down, 0.6f);
+
+        if (hareketEdiyor && yerde)
+        {
+            // EÄŸer top hareket ediyor ve yerdeyse, ses Ã§almÄ±yorsa baÅŸlat
+            if (!yuvarlanmaSesi.isPlaying)
+            {
+                yuvarlanmaSesi.Play();
+            }
+        }
+        else
+        {
+            // Havadaysa veya durduysa sesi kes
+            if (yuvarlanmaSesi.isPlaying)
+            {
+                yuvarlanmaSesi.Stop();
+            }
+        }
+    }
 }
